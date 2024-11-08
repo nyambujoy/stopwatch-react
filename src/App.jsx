@@ -21,6 +21,8 @@ class App extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
+    this.moveDown = this.moveDown.bind(this)
+    this.moveUp = this.moveUp.bind(this)
 
   }
 
@@ -69,12 +71,31 @@ class App extends Component {
       isEditting: true,
     }))
   }
+
   moveUp(index) {
     if (index > 0) {
-      this.setState((state) => ({
-        todos: state.todos[index], state.todos[index + 1] = state.todos[index + 1], state.todos[index]
-      }))
+      this.setState((state) => {
+        const newTodos = [...state.todos];
+        // Swap the current task with the previous one
+        [newTodos[index], newTodos[index - 1]] = [newTodos[index - 1], newTodos[index]];
+        return { todos: newTodos };
+      });
     }
+  }
+
+  moveDown(index) {
+    if (index < this.state.todos.length - 1) {
+      this.setState((state) => {
+        const newTodos = [...state.todos];
+
+        [newTodos[index], newTodos[index + 1]] = [newTodos[index + 1], newTodos[index]];
+        return { todos: newTodos }
+
+
+      })
+
+    }
+
   }
 
 
@@ -93,14 +114,17 @@ class App extends Component {
           />
           <button type="submit">{this.state.isEditting ? "Update" : "Submit"}</button>
         </form>
-        <h4>All the tasks</h4>
+        <h4 id='head'>All the tasks</h4>
         <ul>
           {this.state.todos.map((todo, index) => {
-            return <div key={index}>
+            return <div key={index} className='disa'>
               <li >{todo}</li>
-              <button onClick={() => { this.handleDelete(index) }}>Del</button>
-              <button onClick={() => { this.handleEdit(index) }}>Edit</button>
-              <button onClick={() => { this.moveUp(index) }}>move up</button>
+              <div className="btns">
+                <button id='red' onClick={() => { this.handleDelete(index) }}><i className="fa-solid fa-trash-can"></i></button>
+                <button id='edit' onClick={() => { this.handleEdit(index) }}><i className="fa-regular fa-pen-to-square"></i></button>
+                <button id='up' onClick={() => { this.moveUp(index) }}><i className="fa-solid fa-up-long"></i></button>
+                <button id='down' onClick={() => { this.moveDown(index) }}><i className="fa-solid fa-down-long"></i></button>
+              </div>
             </div>
           })}
         </ul>
