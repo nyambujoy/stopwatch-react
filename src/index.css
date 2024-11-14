@@ -15,7 +15,8 @@ body {
 }
 
 section {
-  margin: 0 50px;
+  margin: 0 10px;
+  max-width: 900px;
 }
 
 section h3 {
